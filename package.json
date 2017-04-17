@@ -1,0 +1,29 @@
+{
+  "name": "@therebel/resource",
+  "version": "0.0.0",
+  "description": "A resource bootstrapper for consildating disparate services",
+  "main": "resource.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/therebelrobot/resource.git"
+  },
+  "keywords": [
+    "resource",
+    "graphql",
+    "model",
+    "therebelrobot",
+    "ozzy",
+    "oz",
+    "services",
+    "infra"
+  ],
+  "author": "Ozzy Haven <npm@therebelrobot.com> (@therebelrobot)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/therebelrobot/resource/issues"
+  },
+  "homepage": "https://github.com/therebelrobot/resource#readme"
+}
