@@ -1,6 +1,6 @@
 {
   "name": "@therebel/resource",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A resource bootstrapper for consildating disparate services",
   "main": "resource.js",
   "scripts": {
