@@ -1,29 +1,20 @@
 function initResource (config) {
   const { resources, connectors } = config
-  async function generateResource (type, method, options, viewer) {
+  async function generateResource (type, method, options, viewer, updateOnValidate) {
     log(`Generating ${type} ${method} resource`)
     const resource = new Resource(type, method, viewer)
     log(`Validating ${type} ${method} request`)
-    try {
-      await resource.validate(options)
-    } catch (e) {
-      debug('An Error occurred while validating:', e)
-      return null
-    }
+    const newViewer = await resource.validate(options)
+    if (updateOnValidate) resource.updateViewer(newViewer)
     log(`Executing ${type} ${method} request`)
-    try {
-      await resource.exec(options)
-    } catch (e) {
-      debug('An Error occurred while executing resource:', e)
-      return null
-    }
+    await resource.exec(options)
     log(`Sanitizing and returning ${type} ${method} request`)
     return resource.sanitize()
   }
   class Resource {
     constructor (type, method, viewer) {
       this.resources = resources
-      this.context = { viewer, connectors}
+      this.context = { viewer, connectors }
 
       this.methodExists = methodExists
       this.typeExists = typeExists
@@ -34,13 +25,15 @@ function initResource (config) {
       this.method = method
       this.methodExists()
     }
-    validate (...args) { return validate.apply(this, args); }
-    exec (...args) { return exec.apply(this, args); }
-    sanitize (...args) { return sanitize.apply(this, args); }
+    validate (...args) { return validate.apply(this, args) }
+    exec (...args) { return exec.apply(this, args) }
+    sanitize (...args) { return sanitize.apply(this, args) }
+    updateViewer (viewer) { this.viewer = viewer }
   }
   return {
     Resource,
-  generateResource}
+    generateResource
+  }
 }
 
 function typeExists () {
@@ -51,12 +44,10 @@ function methodExists () {
   if (!this.resources[this.type][this.method] || typeof this.resources[this.type][this.method] !== 'function') throw new Error(`${this.type} does not contain a ${this.method} method`)
 }
 
-function log (...args) {
+function log(...args) {
   if (process.env.VERBOSE) console.log.apply(console, args)
 }
-function debug (...args) {
-  if (process.env.DEBUG) console.log.apply(console, args)
-}
+
 async function validate (options) {
   this.valid = await this.resources[this.type].validate(this.method, options, this.context)
   return this.valid
@@ -87,7 +78,6 @@ module.exports = {
     typeExists,
     methodExists,
     log,
-    debug,
     validate,
     exec,
     sanitize
