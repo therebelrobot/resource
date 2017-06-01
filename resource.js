@@ -28,7 +28,7 @@ function initResource (config) {
     validate (...args) { return validate.apply(this, args) }
     exec (...args) { return exec.apply(this, args) }
     sanitize (...args) { return sanitize.apply(this, args) }
-    updateViewer (viewer) { this.viewer = viewer }
+    updateViewer (viewer) { this.context.viewer = viewer }
   }
   return {
     Resource,
